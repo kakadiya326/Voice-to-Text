@@ -82,34 +82,87 @@
       <i id="btnvoice1" onclick="toggleVoice('on')" class="fa-solid fa-microphone icons"></i>
       <i id="btnvoice2" onclick="toggleVoice('off')" class="fa-solid fa-microphone-slash icons"
         style="display: none;"></i>
-      <textarea type="text" name="Voice" id="voice" cols="25" rows="10" disabled></textarea>
+      <textarea id="txtVoice" type="text" name="Voice" id="voice" cols="25" rows="10" disabled></textarea>
     </div>
     <div class="right">
       <h1>Text to Voice</h1>
       <i id="btntxt1" onclick="toggleText('on')" class="fa-solid fa-volume-high icons"></i>
       <i id="btntxt2" onclick="toggleText('off')" class="fa-solid fa-volume-xmark icons" style="display: none;"></i>
-      <textarea name="texts" id="texts" cols="30" rows="10"></textarea>
+      <textarea id="textID" class="ion-disc"></textarea>
     </div>
   </div>
   <script>
+    //Voice to Text
+    var textAreaField = document.getElementById('txtVoice');
+
+    var SpeechRecognition = window.SpeechRecognition;
+    const recognition = new SpeechRecognition();
+    if (!recognition) {
+      alert('not working speech API')
+    }
+    else {
+      recognition.lang = 'en-US';
+      recognition.continuous = false; // Stop automatically after a phrase
+      recognition.interimResults = true; // Get partial results as user speaks
+
+      recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          textAreaField.textContent = "You said: " + transcript;
+          console.log(transcript);
+          console.log("Confidence:", event.results[0][0].confidence);
+        };
+    }
+
+
+    //Text to Voice
     var btnText1 = document.getElementById('btntxt1');
     var btnText2 = document.getElementById('btntxt2');
+
+    var inp = document.getElementById('textID');
 
     var btnVoice1 = document.getElementById('btnvoice1');
     var btnVoice2 = document.getElementById('btnvoice2');
 
+    var synth = window.speechSynthesis;
+    var utter = new SpeechSynthesisUtterance();
+
+    synth.onvoiceschanged = () => {
+      var voices = synth.getVoices();
+      utter.voice = voices.find(v => v.lang === 'en-US') || voices[0];
+      synth.speak(utter);
+    };
+
     var isText = false;
 
     function toggleText(e) {
+      if (e == 'on') {
+        utter.text = inp.value;
+        synth.speak(utter);
+      }
+      else {
+        synth.cancel();
+      }
       console.log(e)
       e == 'on' ? btnText2.style.display = 'inline' : btnText2.style.display = 'none';
       e == 'on' ? btnText1.style.display = 'none' : btnText1.style.display = 'inline';
     }
     function toggleVoice(e) {
       console.log(e)
+      if (e == 'on') {
+        recognition.start();
+        textAreaField.innerText = "Listing...!!"
+        
+      }
+      else {
+        recognition.onend = () => {
+          console.log("Recognition ended");
+        };
+      }
       e == 'on' ? btnVoice2.style.display = 'inline' : btnVoice2.style.display = 'none';
       e == 'on' ? btnVoice1.style.display = 'none' : btnVoice1.style.display = 'inline';
     }
+
+
 
 
   </script>
