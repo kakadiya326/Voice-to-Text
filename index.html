@@ -1,15 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div class="new"></div>
-    <div class="new"></div>
-    <div class="new"></div>
-    <div class="new"></div>
-    <div class="new"></div>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    * {
+      margin: 0;
+    }
+
+    .main-con {
+      width: 100%;
+      height: 100vh;
+      background-color: bisque;
+      display: flex;
+      position: relative;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .left,
+    .right {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 20px;
+
+    }
+
+    .left {
+      background-color: lightblue;
+      float: left;
+    }
+
+    .right {
+      background-color: lightgreen;
+      float: right;
+    }
+
+    textarea {
+      width: 90%;
+      height: 30vh;
+    }
+
+    .main-con .buttons {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      gap: 20px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 25px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-con">
+    <div class="buttons">
+      <i class="fa-solid fa-stop"></i>
+      <i class="fa-solid fa-pause"></i>
+      <i class="fa-solid fa-play"></i>
+    </div>
+    <div class="left">
+      <h1>Voice to Text</h1>
+      <i id="btnvoice" class="fa-solid fa-microphone"></i>
+      <i id="btnvoice" class="fa-solid fa-microphone-slash"></i>
+      <textarea type="text" name="Voice" id="voice" cols="25" rows="10" disabled></textarea>
+    </div>
+    <div class="right">
+      <h1>Text to Voice</h1>
+      <i id="btntxt1" onclick="toggleText('on')" class="fa-solid fa-volume-high"></i>
+      <i id="btntxt2" onclick="toggleText('off')" class="fa-solid fa-volume-xmark" style="display: none;"></i>
+      <textarea name="texts" id="texts" cols="30" rows="10"></textarea>
+    </div>
+  </div>
+  <script>
+    var btnText1 = document.getElementById('btntxt1');
+    var btnText2 = document.getElementById('btntxt2');  
+    var isText = false;
+    btnText1.addEventListener('click',()=>{
+      if (isText==false){
+        btnText2.style.display='inline';
+        btnText1.style.display='none';
+        isText=true;
+      }else{
+        btnText2.style.display='none';
+        btnText1.style.display='inline';
+        isText=false;
+      }
+    })
+    function toggleText(e){
+      console.log(e)
+    }
+  </script>
+</body>
+
 </html>
