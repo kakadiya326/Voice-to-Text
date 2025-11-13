@@ -50,32 +50,47 @@
       height: 30vh;
     }
 
+    .icons {
+      font-size: 40px;
+      margin: 20px;
+      cursor: pointer;
+    }
+
+    i {
+      padding: 15px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      color: #333;
+    }
+
+    i:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(23, 23, 23, 0.8);
+      text-shadow: 0 0 25px rgba(192, 192, 192, 0.8);
+    }
+
     .main-con .buttons {
       position: absolute;
       top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      display: none;
+      display: flex;
       gap: 20px;
       background-color: white;
-      padding: 20px;
+      padding: 10px 20px;
       border-radius: 25px;
-    }
-
-    .icons {
-      font-size: 40px;
-      margin: 20px;
-      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
   <div class="main-con">
+
     <div class="buttons">
-      <i class="fa-solid fa-stop"></i>
-      <i class="fa-solid fa-pause"></i>
-      <i class="fa-solid fa-play"></i>
+      <i id="stop" class="fa-solid fa-stop"></i>
+      <i id="pause" onclick="funBtns('pause')" class="fa-solid fa-pause" style="display: none;"></i>
+      <i id="play" onclick="funBtns('play')" class="fa-solid fa-play"></i>
     </div>
     <div class="left">
       <h1>Voice to Text</h1>
@@ -92,29 +107,9 @@
     </div>
   </div>
   <script>
-    //Voice to Text
-    var textAreaField = document.getElementById('txtVoice');
-
-    var SpeechRecognition = window.SpeechRecognition;
-    const recognition = new SpeechRecognition();
-    if (!recognition) {
-      alert('not working speech API')
-    }
-    else {
-      recognition.lang = 'en-US';
-      recognition.continuous = false; // Stop automatically after a phrase
-      recognition.interimResults = true; // Get partial results as user speaks
-
-      recognition.onresult = (event) => {
-          const transcript = event.results[0][0].transcript;
-          textAreaField.textContent = "You said: " + transcript;
-          console.log(transcript);
-          console.log("Confidence:", event.results[0][0].confidence);
-        };
-    }
-
-
-    //Text to Voice
+    let stop = document.getElementById('stop')
+    let pause = document.getElementById('pause')
+    let play = document.getElementById('play')
     var btnText1 = document.getElementById('btntxt1');
     var btnText2 = document.getElementById('btntxt2');
 
@@ -126,10 +121,90 @@
     var synth = window.speechSynthesis;
     var utter = new SpeechSynthesisUtterance();
 
+    var textAreaField = document.getElementById('txtVoice');
+
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+
+
+    if (recognition.onresult) {
+      console.log('speechRecognition working');
+    } else {
+      console.log('speechRecognition not working');
+    }
+
+
+    stop.addEventListener('click', () => {
+      synth.cancel();
+      play.style.display = 'inline';
+      pause.style.display = 'none';
+      btnText1.style.display = 'inline';
+      btnText2.style.display = 'none';
+    })
+
+    function funBtns(e) {
+      if (e == 'pause') {
+        synth.pause();
+        play.style.display = 'inline';
+        pause.style.display = 'none';
+      } else {
+        synth.resume();
+        play.style.display = 'none';
+        pause.style.display = 'inline';
+      }
+    }
+
+
+
+    //Voice to Text
+    if (!recognition) {
+      alert('not working speech API')
+    }
+    else {
+      recognition.lang = 'gu-IN';
+      recognition.continuous = false; // Stop automatically after a phrase
+      recognition.interimResults = true; // Get partial results as user speaks
+
+
+    }
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      textAreaField.textContent = "You said: " + transcript;
+      console.log("Transcript:", transcript);
+      console.log("Confidence:", event.results[0][0].confidence);
+    };
+
+    recognition.onerror = (err) => {
+      console.error("Speech recognition error:", err.error);
+    };
+
+    function toggleVoice(e) {
+      console.log(e)
+      if (e == 'on') {
+        recognition.start();
+        textAreaField.innerText = "Listing...!!"
+
+      }
+      else {
+        recognition.abort();
+        textAreaField.innerText += "\nStopped Listening."
+      }
+      e == 'on' ? btnVoice2.style.display = 'inline' : btnVoice2.style.display = 'none';
+      e == 'on' ? btnVoice1.style.display = 'none' : btnVoice1.style.display = 'inline';
+
+    }
+
+
+
+    //Text to Voice
+
     synth.onvoiceschanged = () => {
       var voices = synth.getVoices();
-      utter.voice = voices.find(v => v.lang === 'en-US') || voices[0];
+      utter.voice = voices.find(v => v.lang === 'gu-IN') || voices[0];
       synth.speak(utter);
+      play.style.display = 'none';
+      pause.style.display = 'inline';
     };
 
     var isText = false;
@@ -138,32 +213,21 @@
       if (e == 'on') {
         utter.text = inp.value;
         synth.speak(utter);
+        btnText2.style.display = 'inline';
+        btnText1.style.display = 'none';
+        pause.style.display = 'inline';
+        play.style.display = 'none';
       }
       else {
         synth.cancel();
+        btnText2.style.display = 'none';
+        btnText1.style.display = 'inline';
+        pause.style.display = 'none';
+        play.style.display = 'inline';
       }
       console.log(e)
-      e == 'on' ? btnText2.style.display = 'inline' : btnText2.style.display = 'none';
-      e == 'on' ? btnText1.style.display = 'none' : btnText1.style.display = 'inline';
+
     }
-    function toggleVoice(e) {
-      console.log(e)
-      if (e == 'on') {
-        recognition.start();
-        textAreaField.innerText = "Listing...!!"
-        
-      }
-      else {
-        recognition.onend = () => {
-          console.log("Recognition ended");
-        };
-      }
-      e == 'on' ? btnVoice2.style.display = 'inline' : btnVoice2.style.display = 'none';
-      e == 'on' ? btnVoice1.style.display = 'none' : btnVoice1.style.display = 'inline';
-    }
-
-
-
 
   </script>
 </body>
