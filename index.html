@@ -73,24 +73,60 @@
     .main-con .buttons {
       position: absolute;
       top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 30%;
+      transform: translateX(-30%);
       display: flex;
       gap: 20px;
       background-color: white;
       padding: 10px 20px;
       border-radius: 25px;
     }
+
+    .dropdown {
+      position: absolute;
+      left: 70%;
+      transform: translateX(-70%);
+      top: 20px;
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+    }
+
+    #voiceList {
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+    }
+
+    #voiceList {
+      transition: all 0.3s ease;
+    }
+
+    #voiceList option {
+      padding: 15px;
+      border-radius: 50%;
+    }
+
+    #voiceList:hover {
+      /* box-shadow: 0 0 20px rgba(23, 23, 23, 0.8); */
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(23, 23, 23, 0.8);
+      text-shadow: 0 0 25px rgba(192, 192, 192, 0.8);
+    }
   </style>
 </head>
 
 <body>
   <div class="main-con">
-
     <div class="buttons">
       <i id="stop" class="fa-solid fa-stop"></i>
       <i id="pause" onclick="funBtns('pause')" class="fa-solid fa-pause" style="display: none;"></i>
       <i id="play" onclick="funBtns('play')" class="fa-solid fa-play"></i>
+    </div>
+    <div class="dropdown">
+      <select name="voiceList" id="voiceList">
+        <option value="" onclick="onOptSelect(event)" disabled selected>--Select Voice--</option>
+      </select>
     </div>
     <div class="left">
       <h1>Voice to Text</h1>
@@ -107,6 +143,16 @@
     </div>
   </div>
   <script>
+    var synth = window.speechSynthesis;
+    var utter = new SpeechSynthesisUtterance();
+
+    var textAreaField = document.getElementById('txtVoice');
+
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    var voicesList = [];
+
+    let selectVoice = document.getElementById('voiceList');
     let stop = document.getElementById('stop')
     let pause = document.getElementById('pause')
     let play = document.getElementById('play')
@@ -118,21 +164,22 @@
     var btnVoice1 = document.getElementById('btnvoice1');
     var btnVoice2 = document.getElementById('btnvoice2');
 
-    var synth = window.speechSynthesis;
-    var utter = new SpeechSynthesisUtterance();
-
-    var textAreaField = document.getElementById('txtVoice');
-
-    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-
+    selectVoice.addEventListener('click', (e) => {
+      console.log('------>', typeof e.target.value);
+      console.log(voicesList[e.target.value] || voicesList[0]);
+      utter.voice = voicesList[e.target.value] || voicesList[0];
+      recognition.lang = voicesList[e.target.value].lang || voicesList[0].lang;
+    })
 
 
-    if (recognition.onresult) {
-      console.log('speechRecognition working');
-    } else {
-      console.log('speechRecognition not working');
-    }
+
+
+
+    // if (recognition.onresult) {
+    //   console.log('speechRecognition working');
+    // } else {
+    //   console.log('speechRecognition not working');
+    // }
 
 
     stop.addEventListener('click', () => {
@@ -155,18 +202,13 @@
       }
     }
 
-
-
     //Voice to Text
     if (!recognition) {
       alert('not working speech API')
     }
     else {
-      recognition.lang = 'gu-IN';
       recognition.continuous = false; // Stop automatically after a phrase
       recognition.interimResults = true; // Get partial results as user speaks
-
-
     }
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
@@ -195,19 +237,23 @@
 
     }
 
-
-
     //Text to Voice
 
     synth.onvoiceschanged = () => {
-      var voices = synth.getVoices();
-      utter.voice = voices.find(v => v.lang === 'gu-IN') || voices[0];
+      voicesList = synth.getVoices();
+      // console.log(voices);
+      for (let obj in voicesList) {
+        let options = document.createElement('option');
+        options.value = obj;
+        options.innerText = `${voicesList[obj].name}`;
+        selectVoice.appendChild(options);
+      }
+
+
       synth.speak(utter);
       play.style.display = 'none';
       pause.style.display = 'inline';
     };
-
-    var isText = false;
 
     function toggleText(e) {
       if (e == 'on') {
