@@ -14,26 +14,27 @@
 <body>
   <div class="main-con">
     <div class="buttons">
-      <i id="stop" class="fa-solid fa-stop"></i>
-      <i id="pause" onclick="funBtns('pause')" class="fa-solid fa-pause" style="display: none;"></i>
-      <i id="play" onclick="funBtns('play')" class="fa-solid fa-play"></i>
+      <i id="stop" title="Stop" class="fa-solid fa-stop"></i>
+      <i id="pause" title="Pause" onclick="funBtns('pause')" class="fa-solid fa-pause" style="display: none;"></i>
+      <i id="play" title="Play" onclick="funBtns('play')" class="fa-solid fa-play"></i>
     </div>
     <div class="dropdown">
-      <select name="voiceList" id="voiceList">
-        <option value="" onclick="onOptSelect(event)" disabled selected>--Select Voice--</option>
-      </select>
+      <input list="language" class="voiceList" placeholder="Select Voices">
+      <datalist id="language">
+
+      </datalist>
     </div>
     <div class="left">
       <h1>Voice to Text</h1>
-      <i id="btnvoice1" onclick="toggleVoice('on')" class="fa-solid fa-microphone icons"></i>
-      <i id="btnvoice2" onclick="toggleVoice('off')" class="fa-solid fa-microphone-slash icons"
+      <i id="btnvoice1" onclick="toggleVoice('on')" title="Start Speaking" style="font-size:40px;" class="fa-solid fa-microphone icons"></i>
+      <i id="btnvoice2" onclick="toggleVoice('off')" title="Stop Speaking" class="fa-solid fa-microphone-slash icons"
         style="display: none;"></i>
       <textarea id="txtVoice" type="text" name="Voice" id="voice" cols="25" rows="10" disabled></textarea>
     </div>
     <div class="right">
       <h1>Text to Voice</h1>
-      <i id="btntxt1" onclick="toggleText('on')" class="fa-solid fa-volume-high icons"></i>
-      <i id="btntxt2" onclick="toggleText('off')" class="fa-solid fa-volume-xmark icons" style="display: none;"></i>
+      <i id="btntxt1" onclick="toggleText('on')" title="Start Voice" style="font-size:40px;" class="fa-solid fa-volume-high icons"></i>
+      <i id="btntxt2" onclick="toggleText('off')" title="Stop Voice"  class="fa-solid fa-volume-xmark icons" style="display: none;"></i>
       <textarea id="textID" class="ion-disc"></textarea>
     </div>
   </div>

@@ -8,7 +8,8 @@
     const recognition = new SpeechRecognition();
     var voicesList = [];
 
-    let selectVoice = document.getElementById('voiceList');
+    let selectVoice = document.getElementsByClassName('voiceList')[0];
+    let datalist = document.getElementById('language');
     let stop = document.getElementById('stop')
     let pause = document.getElementById('pause')
     let play = document.getElementById('play')
@@ -20,7 +21,7 @@
     var btnVoice1 = document.getElementById('btnvoice1');
     var btnVoice2 = document.getElementById('btnvoice2');
 
-    selectVoice.addEventListener('click', (e) => {
+    selectVoice.addEventListener('input', (e) => {
       console.log('------>', typeof e.target.value);
       console.log(voicesList[e.target.value] || voicesList[0]);
       utter.voice = voicesList[e.target.value] || voicesList[0];
@@ -98,7 +99,8 @@
         let options = document.createElement('option');
         options.value = obj;
         options.innerText = `${voicesList[obj].name}`;
-        selectVoice.appendChild(options);
+        datalist.appendChild(options);
+        
       }
 
 
