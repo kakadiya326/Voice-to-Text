@@ -2,6 +2,40 @@
       margin: 0;
     }
 
+    .msg {
+      position: absolute;
+      z-index: 10;
+      top: 50px;
+      left: 10%;
+      display: inline-block;
+      background-color: yellow;
+      padding: 10px 20px;
+      border-radius: 25px;
+      border-top-left-radius: 0%;
+      border: 1px solid black;
+      font-family: Arial, sans-serif;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      animation: fadeInOut 2s forwards ease-out;
+    }
+
+    @keyframes fadeInOut {
+      0% {
+        top: 8px;
+      }
+
+      50% {
+        top: 50px;
+        left: 10%;
+        opacity: 1;
+      }
+
+      100% {
+        top: 8px;
+        opacity: 0;
+      }
+    }
+
     .main-con {
       width: 100%;
       height: 100vh;
@@ -37,6 +71,18 @@
     textarea {
       width: 90%;
       height: 30vh;
+      resize: none;
+      border-radius: 15px;
+    }
+
+    .left textarea {
+      border: 2px solid black;
+      background-color: rgba(0, 255, 0, 0.432);
+    }
+
+    .right textarea {
+      border: 2px solid black;
+      background-color: rgba(0, 191, 255, 0.432);
     }
 
     .icons {
@@ -61,9 +107,9 @@
 
     .main-con .buttons {
       position: absolute;
-      top: 20px;
-      left: 30%;
-      transform: translateX(-30%);
+      top: 190px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       gap: 20px;
       background-color: white;
@@ -72,22 +118,22 @@
     }
 
     .dropdown {
+      width: 300px;
       position: absolute;
-      left: 70%;
-      transform: translateX(-70%);
+      left: 50%;
+      transform: translateX(-50%);
       top: 20px;
       background-color: white;
-      padding: 10px 20px;
-      border-radius: 25px;
+      padding: 15px 20px;
+      border-radius: 20px;
     }
 
     .voiceList {
+      width: 100%;
       background-color: white;
-      padding: 10px 20px;
+      padding: 15px 25px;
+      box-sizing: border-box;
       border-radius: 25px;
-    }
-
-    .voiceList {
       transition: all 0.3s ease;
     }
 
@@ -97,12 +143,7 @@
     }
 
     .voiceList:hover {
-      /* box-shadow: 0 0 20px rgba(23, 23, 23, 0.8); */
       transform: scale(1.1);
       box-shadow: 0 0 20px rgba(23, 23, 23, 0.8);
       text-shadow: 0 0 25px rgba(192, 192, 192, 0.8);
-    }
-
-    i.fa-microphone {
-      pointer-events: auto !important;
     }
