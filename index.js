@@ -17,6 +17,9 @@ let stop = document.getElementById('stop');
 let pause = document.getElementById('pause');
 let play = document.getElementById('play');
 
+let speedEle = document.getElementById('pitch');
+let rateEle = document.getElementById('rate');
+
 var btnText1 = document.getElementById('btntxt1');
 var btnText2 = document.getElementById('btntxt2');
 
@@ -112,7 +115,6 @@ recognition.onerror = (err) => {
 };
 
 function toggleVoice(e) {
- 
   if (e == 'on') {
     isRunning('voiceOn');
     recognition.start();
@@ -132,7 +134,7 @@ function toggleVoice(e) {
 
 synth.onvoiceschanged = () => {
   voicesList = synth.getVoices();
-  
+
   for (let obj in voicesList) {
     let options = document.createElement('option');
     options.value = obj;
@@ -142,6 +144,8 @@ synth.onvoiceschanged = () => {
   }
 
 
+  utter.pitch = speedEle.value < 0 ? 1 : Number(speedEle.value);
+  utter.rate = rateEle.value < 0 ? 1 : Number(rateEle.value);
   synth.speak(utter);
   play.style.display = 'none';
   pause.style.display = 'inline';
@@ -156,10 +160,10 @@ function toggleText(e) {
     btnText1.style.display = 'none';
     pause.style.display = 'inline';
     play.style.display = 'none';
-    utter.onend = function() {
-        // We call the 'off' logic to clean up the UI and re-enable the Voice button.
-        // We use 'off' here because it's the simplest way to run the cleanup logic.
-        toggleText('off'); 
+    utter.onend = function () {
+      // We call the 'off' logic to clean up the UI and re-enable the Voice button.
+      // We use 'off' here because it's the simplest way to run the cleanup logic.
+      toggleText('off');
     };
   }
   else {

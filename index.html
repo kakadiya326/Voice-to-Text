@@ -14,18 +14,29 @@
 <body>
   <div>
   </div>
-  <div class="main-con">  
-    <div class="buttons">
-      <i id="stop" title="Stop" class="fa-solid fa-stop"></i>
-      <i id="pause" title="Pause" onclick="funBtns('pause')" class="fa-solid fa-pause" style="display: none;"></i>
-      <i id="play" title="Play" onclick="funBtns('play')" class="fa-solid fa-play"></i>
-    </div>
-    <div class="dropdown">
-      <input list="language" class="voiceList" placeholder="Select Voices">
-      <datalist id="language">
+  <div class="main-con">
 
-      </datalist>
-    </div>
+    <nav>
+      <div class="dropdown nav-box">
+        <input list="language" class="voiceList" placeholder="Select Voices">
+        <datalist id="language"></datalist>
+      </div>
+
+      <div class="buttons nav-box">
+        <i id="stop" title="Stop" class="fa-solid fa-stop"></i>
+        <i id="pause" title="Pause" onclick="funBtns('pause')" class="fa-solid fa-pause" style="display: none;"></i>
+        <i id="play" title="Play" onclick="funBtns('play')" class="fa-solid fa-play"></i>
+      </div>
+
+      <div class="nav-box">
+        <input type="number" min="0" max="2" step="0.1" id="pitch" placeholder="Speed">
+      </div>
+
+      <div class="range-box nav-box">
+        <input type="range" min="0.5" max="10" value="1" step="0.1" id="rate" />
+      </div>
+    </nav>
+
     <div class="left">
       <h1>Voice to Text</h1>
       <i id="btnvoice1" onclick="toggleVoice('on')" title="Start Speaking" style="font-size:40px;"
